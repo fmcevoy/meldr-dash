@@ -1,0 +1,30 @@
+{
+  "name": "meldr-dash",
+  "version": "0.1.0",
+  "description": "TUI dashboard for monitoring AI coding CLI token usage and surfacing saving techniques",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "meldr-dash": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/vitest run",
+    "test:watch": "node --experimental-vm-modules node_modules/.bin/vitest"
+  },
+  "keywords": ["tui", "dashboard", "token", "claude", "ai"],
+  "license": "MIT",
+  "dependencies": {
+    "ink": "^5.1.0",
+    "react": "^18.3.0",
+    "chokidar": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "typescript": "^5.5.0",
+    "ink-testing-library": "^4.0.0",
+    "vitest": "^3.0.0"
+  }
+}

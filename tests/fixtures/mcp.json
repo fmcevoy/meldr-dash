@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "github": { "type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] },
+    "context7": { "type": "stdio", "command": "npx", "args": ["-y", "@upstash/context7-mcp@latest"] },
+    "docker": { "type": "stdio", "command": "npx", "args": ["-y", "docker-mcp"], "disabled": true }
+  }
+}

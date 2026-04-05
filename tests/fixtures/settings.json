@@ -1,0 +1,5 @@
+{
+  "permissions": { "defaultMode": "auto" },
+  "enabledPlugins": { "vercel": true, "slack": true, "superpowers": true },
+  "statusLine": { "type": "command", "command": "~/.claude/statusline-command.sh" }
+}

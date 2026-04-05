@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "dailyActivity": [
+    { "date": "2026-04-05", "messageCount": 42, "sessionCount": 3, "toolCallCount": 18 }
+  ],
+  "dailyModelTokens": [
+    { "date": "2026-04-05", "tokensByModel": { "claude-opus-4-6": 150000, "claude-sonnet-4-6": 80000 } }
+  ],
+  "modelUsage": {
+    "claude-opus-4-6": {
+      "inputTokens": 500000,
+      "outputTokens": 120000,
+      "cacheReadInputTokens": 350000,
+      "cacheCreationInputTokens": 50000,
+      "costUSD": 12.50,
+      "contextWindow": 200000,
+      "maxOutputTokens": 16384
+    }
+  },
+  "totalSessions": 50,
+  "totalMessages": 800
+}

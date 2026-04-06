@@ -1,0 +1,63 @@
+{
+  "sessionId": "session-001",
+  "projectPath": "/home/user/my-project",
+  "startTime": "2026-03-01T10:00:00.000Z",
+  "lastUpdated": "2026-03-01T10:30:00.000Z",
+  "kind": "main",
+  "messages": [
+    {
+      "type": "user",
+      "text": "Add a login form",
+      "timestamp": 1775386800000
+    },
+    {
+      "type": "gemini",
+      "text": "I'll create a login form component.",
+      "model": "gemini-2.5-pro",
+      "timestamp": 1775386810000,
+      "tokens": {
+        "input": 5000,
+        "output": 3000,
+        "cached": 2000,
+        "thoughts": 500,
+        "total": 10500
+      }
+    },
+    {
+      "type": "user",
+      "text": "Add validation",
+      "timestamp": 1775386820000
+    },
+    {
+      "type": "gemini",
+      "text": "I'll add form validation.",
+      "model": "gemini-2.5-pro",
+      "timestamp": 1775386830000,
+      "tokens": {
+        "input": 8000,
+        "output": 4000,
+        "cached": 3000,
+        "thoughts": 800,
+        "total": 15800
+      }
+    },
+    {
+      "type": "user",
+      "text": "Add tests",
+      "timestamp": 1775386840000
+    },
+    {
+      "type": "gemini",
+      "text": "Here are the tests.",
+      "model": "gemini-2.5-pro",
+      "timestamp": 1775386850000,
+      "tokens": {
+        "input": 12000,
+        "output": 5000,
+        "cached": 4000,
+        "thoughts": 1000,
+        "total": 22000
+      }
+    }
+  ]
+}

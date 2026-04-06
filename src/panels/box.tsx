@@ -21,7 +21,8 @@ export function PanelBox({
       flexDirection="column"
       borderStyle="single"
       borderColor="gray"
-      width={width}
+      flexGrow={1}
+      width={width ?? "100%"}
       height={height}
     >
       <Text color={titleColor} bold dimColor>

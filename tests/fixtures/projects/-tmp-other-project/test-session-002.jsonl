@@ -1,0 +1,5 @@
+{"type":"user","message":{"role":"user","content":"help me"},"timestamp":1775410100000,"sessionId":"test-session-002"}
+{"type":"assistant","message":{"model":"claude-sonnet-4-6","role":"assistant","content":"Sure","usage":{"input_tokens":5,"cache_read_input_tokens":0,"cache_creation_input_tokens":10000,"output_tokens":30}},"timestamp":1775410110000,"sessionId":"test-session-002"}
+{"type":"assistant","message":{"model":"claude-sonnet-4-6","role":"assistant","content":"Here's help...","usage":{"input_tokens":5,"cache_read_input_tokens":0,"cache_creation_input_tokens":10000,"output_tokens":150}},"timestamp":1775410120000,"sessionId":"test-session-002"}
+{"type":"user","message":{"role":"user","content":"thanks"},"timestamp":1775410200000,"sessionId":"test-session-002"}
+{"type":"assistant","message":{"model":"claude-sonnet-4-6","role":"assistant","content":"You're welcome","usage":{"input_tokens":10,"cache_read_input_tokens":10000,"cache_creation_input_tokens":2000,"output_tokens":50}},"timestamp":1775410210000,"sessionId":"test-session-002"}

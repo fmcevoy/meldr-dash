@@ -1,0 +1,4 @@
+{"timestamp":1775410000000,"item":{"type":"session_meta","model":"gpt-4.1","project":"other-project","cwd":"/home/user/other-project"}}
+{"timestamp":1775410010000,"item":{"type":"turn_context","text":"Explain the auth flow"}}
+{"timestamp":1775410020000,"item":{"type":"response_item","model":"gpt-4.1","usage":{"inputTokens":3000,"outputTokens":2000,"cachedInputTokens":1000,"reasoningOutputTokens":0,"modelContextWindow":1000000}}}
+{"timestamp":1775410030000,"item":{"type":"compacted"}}

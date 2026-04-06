@@ -2,6 +2,11 @@
 import React from "react";
 import { render } from "ink";
 import { App } from "./app.js";
+import { ClaudeAdapter } from "./adapters/claude.js";
+import { CursorAdapter } from "./adapters/cursor.js";
+import { GeminiAdapter } from "./adapters/gemini.js";
+import { CodexAdapter } from "./adapters/codex.js";
+import { buildDumpOutput } from "./dump.js";
 
 function printUsage(): void {
   const usage = `
@@ -11,17 +16,28 @@ Usage:
   meldr-dash [options]
 
 Options:
-  --cli <name>       Adapter name (default: "claude", only "claude" supported)
+  --cli <name>       Adapter name (default: "claude")
+  --platform <name>  Alias for --cli (e.g. "claude", "cursor", "gemini", "codex")
   --poll <seconds>   Poll interval in seconds (default: 15)
   --data-dir <path>  Custom data directory (default: ~/.claude)
   --session <id>     Specific session ID to monitor
+  --dump <category>  Dump data as JSON to stdout and exit
+                     Categories: state, sessions, monitors, tips,
+                                 metrics, environment, all
   --help             Show this help message
+
+Dump examples:
+  meldr-dash --dump state
+  meldr-dash --dump monitors --session <id>
+  meldr-dash --dump all --platform cursor
+  meldr-dash --dump sessions | jq '.[0].contextPercent'
 
 Keybindings:
   q  Quit
   r  Force refresh
-  n  Next recommendations page
-  p  Previous recommendations page
+  p  Cycle platform
+  s  Cycle active session
+  ?  Toggle help
 `.trim();
 
   console.log(usage);
@@ -32,6 +48,7 @@ function parseArgs(argv: string[]): {
   poll: number;
   dataDir?: string;
   sessionId?: string;
+  dump?: string;
   help: boolean;
 } {
   const args = argv.slice(2);
@@ -39,11 +56,13 @@ function parseArgs(argv: string[]): {
   let poll = 15;
   let dataDir: string | undefined;
   let sessionId: string | undefined;
+  let dump: string | undefined;
   let help = false;
 
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       case "--cli":
+      case "--platform":
         cli = args[++i] ?? "claude";
         break;
       case "--poll":
@@ -55,6 +74,9 @@ function parseArgs(argv: string[]): {
       case "--session":
         sessionId = args[++i];
         break;
+      case "--dump":
+        dump = args[++i];
+        break;
       case "--help":
       case "-h":
         help = true;
@@ -62,7 +84,7 @@ function parseArgs(argv: string[]): {
     }
   }
 
-  return { cli, poll, dataDir, sessionId, help };
+  return { cli, poll, dataDir, sessionId, dump, help };
 }
 
 const opts = parseArgs(process.argv);
@@ -72,15 +94,46 @@ if (opts.help) {
   process.exit(0);
 }
 
-if (opts.cli !== "claude") {
-  console.error(`Unsupported adapter: "${opts.cli}". Only "claude" is supported.`);
-  process.exit(1);
+function createAdapter(cli: string, dataDir?: string, sessionId?: string) {
+  switch (cli) {
+    case "cursor":
+      return new CursorAdapter({ dataDir });
+    case "gemini":
+      return new GeminiAdapter({ dataDir });
+    case "codex":
+      return new CodexAdapter({ dataDir });
+    default:
+      return new ClaudeAdapter({ dataDir, sessionId });
+  }
 }
 
-render(
-  <App
-    dataDir={opts.dataDir}
-    sessionId={opts.sessionId}
-    pollInterval={opts.poll * 1000}
-  />,
-);
+if (opts.dump) {
+  const adapter = createAdapter(opts.cli, opts.dataDir, opts.sessionId);
+
+  adapter
+    .collectState()
+    .then((state) => {
+      const output = buildDumpOutput(opts.dump!, state, opts.sessionId);
+      console.log(JSON.stringify(output, null, 2));
+      process.exit(0);
+    })
+    .catch((err: Error) => {
+      console.error(err.message);
+      process.exit(1);
+    });
+} else {
+  if (!["claude", "cursor", "gemini", "codex"].includes(opts.cli)) {
+    console.error(
+      `Unsupported adapter: "${opts.cli}". Supported: "claude", "cursor", "gemini", "codex".`,
+    );
+    process.exit(1);
+  }
+
+  render(
+    <App
+      dataDir={opts.dataDir}
+      sessionId={opts.sessionId}
+      pollInterval={opts.poll * 1000}
+    />,
+  );
+}

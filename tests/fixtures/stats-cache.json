@@ -18,5 +18,6 @@
     }
   },
   "totalSessions": 50,
-  "totalMessages": 800
+  "totalMessages": 800,
+  "hourCounts": { "9": 50, "10": 120, "11": 95, "14": 80, "15": 60, "20": 10 }
 }

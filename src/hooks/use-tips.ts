@@ -1,54 +1,77 @@
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { DashboardState } from "../adapters/types.js";
-import { evaluate, EvaluationResult } from "../tips/evaluator.js";
+import { evaluate } from "../tips/evaluator.js";
 import { Technique } from "../tips/database.js";
 
-const RECOMMENDATIONS_PER_PAGE = 4;
-const ROTATION_INTERVAL_MS = 10000;
+const DEFAULT_PER_PAGE = 3;
 
-export function useTips(state: DashboardState): {
-  alerts: Technique[];
-  recommendations: Technique[];
-  nextRecommendations: () => void;
-  prevRecommendations: () => void;
+function paginate(items: Technique[], page: number, perPage: number): { visible: Technique[]; total: number } {
+  const pp = Math.max(1, perPage);
+  const total = Math.max(1, Math.ceil(items.length / pp));
+  const safePage = page % total;
+  const start = safePage * pp;
+  return { visible: items.slice(start, start + pp), total };
+}
+
+/**
+ * Compute how many alert items fit in a panel of the given height.
+ * Overhead: border (2) + title row (1) = 3 lines.
+ * Small panels (<=10): 1 line per item (fix text omitted by panel).
+ * Larger panels: 2 lines per item (title + fix).
+ */
+export function itemsPerPage(panelHeight: number | undefined): number {
+  if (!panelHeight || panelHeight <= 3) return DEFAULT_PER_PAGE;
+  const contentLines = panelHeight - 3;
+  if (panelHeight <= 10) return Math.max(1, contentLines);
+  return Math.max(1, Math.floor(contentLines / 2));
+}
+
+export function useTips(
+  state: DashboardState,
+  selectedSessionId?: string,
+  monitorCapacity: number = DEFAULT_PER_PAGE,
+  tipCapacity: number = DEFAULT_PER_PAGE,
+): {
+  visibleMonitors: Technique[];
+  monitorPage: number;
+  totalMonitorPages: number;
+  totalMonitors: number;
+  visibleTips: Technique[];
+  tipPage: number;
+  totalTips: number;
+  totalTipPages: number;
+  nextMonitorPage: () => void;
+  nextTipPage: () => void;
 } {
-  const [page, setPage] = useState(0);
-
-  const { alerts, recommendations: allRecs } = useMemo(
-    () => evaluate(state),
-    [state]
+  const { monitors, allTips } = useMemo(
+    () => evaluate(state, selectedSessionId),
+    [state, selectedSessionId],
   );
 
-  // Auto-rotate recommendations
-  useEffect(() => {
-    const maxPage = Math.max(
-      0,
-      Math.ceil(allRecs.length / RECOMMENDATIONS_PER_PAGE) - 1
-    );
-    const timer = setInterval(() => {
-      setPage((p) => (p + 1) % (maxPage + 1));
-    }, ROTATION_INTERVAL_MS);
-    return () => clearInterval(timer);
-  }, [allRecs.length]);
+  const [monitorPage, setMonitorPage] = useState(0);
+  const [tipPage, setTipPage] = useState(0);
 
-  const start = page * RECOMMENDATIONS_PER_PAGE;
-  const recommendations = allRecs.slice(start, start + RECOMMENDATIONS_PER_PAGE);
+  const monPag = paginate(monitors, monitorPage, monitorCapacity);
+  const tipPag = paginate(allTips, tipPage, tipCapacity);
 
-  const nextRecommendations = useCallback(() => {
-    const maxPage = Math.max(
-      0,
-      Math.ceil(allRecs.length / RECOMMENDATIONS_PER_PAGE) - 1
-    );
-    setPage((p) => (p + 1) % (maxPage + 1));
-  }, [allRecs.length]);
+  const nextMonitorPage = useCallback(() => {
+    setMonitorPage((p) => (p + 1) % monPag.total);
+  }, [monPag.total]);
 
-  const prevRecommendations = useCallback(() => {
-    const maxPage = Math.max(
-      0,
-      Math.ceil(allRecs.length / RECOMMENDATIONS_PER_PAGE) - 1
-    );
-    setPage((p) => (p === 0 ? maxPage : p - 1));
-  }, [allRecs.length]);
+  const nextTipPage = useCallback(() => {
+    setTipPage((p) => (p + 1) % tipPag.total);
+  }, [tipPag.total]);
 
-  return { alerts, recommendations, nextRecommendations, prevRecommendations };
+  return {
+    visibleMonitors: monPag.visible,
+    monitorPage,
+    totalMonitorPages: monPag.total,
+    totalMonitors: monitors.length,
+    visibleTips: tipPag.visible,
+    tipPage,
+    totalTips: allTips.length,
+    totalTipPages: tipPag.total,
+    nextMonitorPage,
+    nextTipPage,
+  };
 }

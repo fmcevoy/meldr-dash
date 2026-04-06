@@ -1,0 +1,26 @@
+{
+  "sessionId": "session-002",
+  "projectPath": "/home/user/my-project",
+  "startTime": "2026-02-28T14:00:00.000Z",
+  "lastUpdated": "2026-02-28T14:20:00.000Z",
+  "kind": "main",
+  "messages": [
+    {
+      "type": "user",
+      "text": "Explain the auth flow",
+      "timestamp": 1775314800000
+    },
+    {
+      "type": "gemini",
+      "text": "The auth flow works as follows...",
+      "model": "gemini-2.5-flash",
+      "timestamp": 1775314810000,
+      "tokens": {
+        "input": 3000,
+        "output": 2000,
+        "cached": 1000,
+        "total": 6000
+      }
+    }
+  ]
+}

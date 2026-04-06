@@ -1,12 +1,8 @@
 import React from "react";
 import { Box, Text } from "ink";
 import { PanelBox } from "./box.js";
-import { TurnEntry } from "../adapters/types.js";
+import { DashboardState, SessionSummary } from "../adapters/types.js";
 import { colors } from "../theme.js";
-
-interface HistoryProps {
-  turns: TurnEntry[];
-}
 
 function formatTime(timestamp: number): string {
   const d = new Date(timestamp);
@@ -20,7 +16,20 @@ function truncate(text: string, max: number): string {
   return text.slice(0, max - 1) + "\u2026";
 }
 
-export function History({ turns }: HistoryProps): React.ReactElement {
+function getSession(state: DashboardState, id?: string): SessionSummary | undefined {
+  if (id) return state.sessionList.find((s) => s.sessionId === id);
+  return state.sessionList.find((s) => s.isSelected);
+}
+
+interface HistoryProps {
+  state: DashboardState;
+  selectedSessionId?: string;
+}
+
+export function History({ state, selectedSessionId }: HistoryProps): React.ReactElement {
+  const session = getSession(state, selectedSessionId);
+  const turns = session?.recentTurns ?? [];
+
   if (turns.length === 0) {
     return (
       <PanelBox title="History">

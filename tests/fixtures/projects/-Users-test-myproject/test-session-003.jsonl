@@ -1,0 +1,2 @@
+{"type":"user","message":{"role":"user","content":"big task"},"timestamp":1775415100000,"sessionId":"test-session-003"}
+{"type":"assistant","message":{"model":"claude-opus-4-6","role":"assistant","content":"Working on it","usage":{"input_tokens":1000,"cache_read_input_tokens":180000,"cache_creation_input_tokens":70000,"output_tokens":2000}},"timestamp":1775415200000,"sessionId":"test-session-003"}

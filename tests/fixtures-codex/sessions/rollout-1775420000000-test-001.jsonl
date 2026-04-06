@@ -1,0 +1,7 @@
+{"timestamp":1775420000000,"item":{"type":"session_meta","model":"o3","project":"my-project","cwd":"/home/user/my-project"}}
+{"timestamp":1775420010000,"item":{"type":"turn_context","text":"Fix the login bug"}}
+{"timestamp":1775420020000,"item":{"type":"response_item","model":"o3","usage":{"inputTokens":5000,"outputTokens":3000,"cachedInputTokens":2000,"reasoningOutputTokens":1000,"modelContextWindow":200000}}}
+{"timestamp":1775420030000,"item":{"type":"turn_context","text":"Add validation"}}
+{"timestamp":1775420040000,"item":{"type":"response_item","model":"o3","usage":{"inputTokens":8000,"outputTokens":4000,"cachedInputTokens":3000,"reasoningOutputTokens":1500,"modelContextWindow":200000}}}
+{"timestamp":1775420050000,"item":{"type":"turn_context","text":"Add tests"}}
+{"timestamp":1775420060000,"item":{"type":"response_item","model":"o3","usage":{"inputTokens":12000,"outputTokens":5000,"cachedInputTokens":4000,"reasoningOutputTokens":2000,"modelContextWindow":200000}}}

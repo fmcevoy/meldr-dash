@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 import React from "react";
 import { render } from "ink";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
 import { App } from "./app.js";
 import { ClaudeAdapter } from "./adapters/claude.js";
 import { CursorAdapter } from "./adapters/cursor.js";
@@ -8,14 +11,40 @@ import { GeminiAdapter } from "./adapters/gemini.js";
 import { CodexAdapter } from "./adapters/codex.js";
 import { buildDumpOutput } from "./dump.js";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+function getVersion(): string {
+  const pkg = JSON.parse(
+    readFileSync(resolve(__dirname, "..", "package.json"), "utf-8"),
+  );
+  return pkg.version;
+}
+
+// Subcommand interception — runs before parseArgs
+const subcommand = process.argv[2];
+if (subcommand === "update" || subcommand === "upgrade") {
+  const { runUpdate } = await import("./commands/update.js");
+  await runUpdate();
+  process.exit(0);
+}
+if (subcommand === "--version" || subcommand === "-v") {
+  console.log(`meldr-dash v${getVersion()}`);
+  process.exit(0);
+}
+
 function printUsage(): void {
   const usage = `
 meldr-dash — Claude Code dashboard
 
 Usage:
-  meldr-dash [options]
+  meldr-dash [command] [options]
+
+Commands:
+  update, upgrade    Update meldr-dash to the latest version
 
 Options:
+  --version, -v      Show version number
   --cli <name>       Adapter name (default: "claude")
   --platform <name>  Alias for --cli (e.g. "claude", "cursor", "gemini", "codex")
   --poll <seconds>   Poll interval in seconds (default: 15)

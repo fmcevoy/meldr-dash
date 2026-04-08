@@ -1,6 +1,6 @@
 {
   "name": "meldr-dash",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TUI dashboard for monitoring AI coding CLI token usage and surfacing saving techniques",
   "type": "module",
   "main": "dist/index.js",
